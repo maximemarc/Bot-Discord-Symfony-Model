@@ -1,0 +1,35 @@
+# config/services.yaml
+services:
+    _defaults:
+        autowire: true
+        autoconfigure: true
+
+    App\:
+        resource: '../src/'
+        exclude:
+            - '../src/DependencyInjection/'
+            - '../src/Entity/'
+            - '../src/Kernel.php'
+
+    App\Services\DiscordService:
+        public: true
+        arguments:
+            $token: '%env(DISCORD_BOT_TOKEN)%'
+
+    App\Discord\Manager\CommandManager:
+        public: false
+        arguments:
+            $commands: !tagged app.discord_command
+            $commandPrefix: '%env(DISCORD_COMMAND_PREFIX)%'
+
+    App\Discord\Manager\ListenerManager:
+        public: false
+        arguments:
+            $listeners: !tagged app.discord_listener
+
+    _instanceof:
+        App\Discord\Abstract\AbstractDiscordCommand:
+            tags: [ 'app.discord_command' ]
+
+        App\Discord\Abstract\AbstractDiscordListener:
+            tags: [ 'app.discord_listener' ]
