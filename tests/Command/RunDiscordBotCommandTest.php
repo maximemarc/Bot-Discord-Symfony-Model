@@ -58,17 +58,17 @@ class RunDiscordBotCommandTest extends KernelTestCase
 	/**
 	 * @throws Exception
 	 */
-	protected function setUp(): void
-	{
-		self::bootKernel();
-		$this->discordServiceMock = $this->createMock(DiscordService::class);
+        protected function setUp(): void
+        {
+                $kernel = self::bootKernel();
+                $this->discordServiceMock = $this->createMock(DiscordService::class);
 
-		$application = new Application(self::$kernel);
+                $application = new Application($kernel);
 
-		self::$kernel->getContainer()->set(DiscordService::class, $this->discordServiceMock);
+                $kernel->getContainer()->set(DiscordService::class, $this->discordServiceMock);
 
-		$command = $application->find('app:run-discord-bot');
+                $command = $application->find('app:run-discord-bot');
 
-		$this->commandTester = new CommandTester($command);
-	}
+                $this->commandTester = new CommandTester($command);
+        }
 }
